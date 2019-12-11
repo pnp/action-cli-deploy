@@ -57,11 +57,15 @@ jobs:
         ADMIN_USERNAME:  ${{ secrets.adminUsername }}
         ADMIN_PASSWORD:  ${{ secrets.adminPassword }}
     
+    # Office 365 cli deploy app action
+    # Use either option 1 or option 2
+    
     # Option 1 - Deploy app at tenant level
     - name: Option 1 - Deploy app to tenant
         uses: pnp/action-cli-deploy@v1
         env:
           APP_FILE_PATH: sharepoint/solution/spfx-o365-cli-action.sppkg
+    # Option 1 - ends
      
     # Option 2 - Deploy app to a site collection
     - name: Option 2 - Deploy app to a site collection
@@ -70,4 +74,5 @@ jobs:
           APP_FILE_PATH: sharepoint/solution/spfx-o365-cli-action.sppkg
           SCOPE: sitecollection
           SITE_COLLECTION_URL: https://contoso.sharepoint.com/sites/teamsite
+    # Option 2 - ends
 ```
