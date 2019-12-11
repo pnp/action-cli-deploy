@@ -10,7 +10,7 @@ This GitHub Action (created using Docker container) uses [Office 365 CLI](https:
 Create a workflow `.yml` file in your `.github/workflows` directory. An [example workflow](#example-workflow---office-365-cli-deploy) is available below. For more information, reference the GitHub Help Documentation for [Creating a workflow file](https://help.github.com/en/articles/configuring-a-workflow#creating-a-workflow-file).
 
 ### Note
-This action works in conjunction with `action-cli-login`. So in the workflow we need to run  `action-cli-login` before using this action.
+This action is dependant on `action-cli-login`. So in the workflow we need to run  `action-cli-login` before using this action.
 
 #### Optional requirement
 Since `action-cli-login` requires user name and password which are sensitive pieces of information, it would be ideal to store them securely. We can achieve this in a GitHub repo by using [secrets](https://help.github.com/en/actions/automating-your-workflow-with-github-actions/creating-and-using-encrypted-secrets). So, click on `settings` tab in your repo and add 2 new secrets:
