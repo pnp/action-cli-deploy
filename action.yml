@@ -1,0 +1,23 @@
+name: 'Office 365 CLI Deploy App'
+description: 'Deploy an app using Office 365 CLI'
+inputs:
+  APP_FILE_PATH:  
+    description: 'Relative path of the app in your repo'
+    required: true
+  SCOPE:
+    description: 'Scope of the app catalog: tenant or sitecollection. Default is tenant'
+  SITE_COLLECTION_URL:
+    description: 'The URL of the site collection where the solution package will be added. Required if scope is set to sitecollection'
+  SKIP_FEATURE_DEPLOYMENT:
+    description: 'True or false. If the app supports tenant-wide deployment, deploy it to the whole tenant. Default is false'
+  OVERWRITE:
+    description: 'True or false. Set to overwrite the existing package file. Default is false'
+output:
+    APP_ID:
+      description: 'The Id of the app that gets deployed'
+runs:
+  using: "node12"
+  main: "dist/index.js"
+branding:
+  icon: 'download'  
+  color: 'blue'
