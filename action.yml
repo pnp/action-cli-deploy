@@ -12,8 +12,8 @@ output:
     APP_ID:
       description: 'The Id of the app that gets deployed'
 runs:
-  using: 'docker'
-  image: 'Dockerfile'
+  using: "node12"
+  main: "dist/index.js"
 branding:
   icon: 'download'  
   color: 'blue'
