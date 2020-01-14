@@ -1,9 +1,9 @@
-# action-cli-deploy
+# Office 365 CLI Deploy
 GitHub action to deploy an app using Office 365 CLI
 
 ![Office 365 CLI Deploy App](./images/cli-deploy.png)
 
-This GitHub Action (created using Docker container) uses [Office 365 CLI](https://pnp.github.io/office365-cli/), specifically the [spo app add](https://pnp.github.io/office365-cli/cmd/spo/app/app-add/), [spo app deploy](https://pnp.github.io/office365-cli/cmd/spo/app/app-deploy/) and [spo app install](https://pnp.github.io/office365-cli/cmd/spo/app/app-install/) commands, to add, deploy and (if site collection) install an app.
+This GitHub Action (created using typescript) uses [Office 365 CLI](https://pnp.github.io/office365-cli/), specifically the [spo app add](https://pnp.github.io/office365-cli/cmd/spo/app/app-add/), [spo app deploy](https://pnp.github.io/office365-cli/cmd/spo/app/app-deploy/) and [spo app install](https://pnp.github.io/office365-cli/cmd/spo/app/app-install/) commands, to add, deploy and (if site collection) install an app.
 
 ## Usage
 ### Pre-requisites
@@ -22,6 +22,11 @@ These secrets are encrypted and can only be used by GitHub actions.
 - `APP_FILE_PATH` : **Required** Relative path of the app in your repo.
 - `SCOPE` : Scope of the app catalog: `tenant|sitecollection`. Default `tenant`.
 - `SITE_COLLECTION_URL` : The URL of the site collection where the solution package will be added and installed. It must be specified when the scope is `sitecollection`.
+- `SKIP_FEATURE_DEPLOYMENT` : `true|false` If the app supports tenant-wide deployment, deploy it to the whole tenant.
+- `OVERWRITE` : `true|false` Set to overwrite the existing package file.
+
+### Output
+- `APP_ID` : The id of the app that gets deployed
 
 ### Example workflow - Office 365 CLI Deploy
 On every `push` build the code, then login to Office 365 and then start deploying.
@@ -53,7 +58,7 @@ jobs:
     # Office 365 cli login action
     - name: Login to tenant
       uses: pnp/action-cli-login@v1
-      env:
+      with:
         ADMIN_USERNAME:  ${{ secrets.adminUsername }}
         ADMIN_PASSWORD:  ${{ secrets.adminPassword }}
     
@@ -62,17 +67,24 @@ jobs:
     
     # Option 1 - Deploy app at tenant level
     - name: Option 1 - Deploy app to tenant
+        id: o365clideploy # optional - use if output needs to be used
         uses: pnp/action-cli-deploy@v1
-        env:
+        with:
           APP_FILE_PATH: sharepoint/solution/spfx-o365-cli-action.sppkg
+          SKIP_FEATURE_DEPLOYMENT: true
+          OVERWRITE: true
     # Option 1 - ends
      
     # Option 2 - Deploy app to a site collection
     - name: Option 2 - Deploy app to a site collection
         uses: pnp/action-cli-deploy@v1
-        env:
+        with:
           APP_FILE_PATH: sharepoint/solution/spfx-o365-cli-action.sppkg
           SCOPE: sitecollection
           SITE_COLLECTION_URL: https://contoso.sharepoint.com/sites/teamsite
     # Option 2 - ends
+
+    # Print the id of the app
+    - name: Get the id of the app deployed
+      run: echo "The id of the app deployed is ${{ steps.o365clideploy.outputs.APP_ID }}"
 ```

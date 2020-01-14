@@ -8,6 +8,9 @@ inputs:
     description: 'Scope of the app catalog'
   SITE_COLLECTION_URL:
     description: 'The URL of the app catalog where the solution package will be added.'
+output:
+    APP_ID:
+      description: 'The Id of the app that gets deployed'
 runs:
   using: 'docker'
   image: 'Dockerfile'
