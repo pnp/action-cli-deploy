@@ -994,7 +994,7 @@ function main() {
                     }
                     else {
                         appId = yield executeO365CLICommand(`spo app add -p ${appFilePath} --scope sitecollection --appCatalogUrl ${siteCollectionUrl} ${overwrite}`);
-                        yield executeO365CLICommand(`spo app deploy --id ${appId} --scope sitecollection --appCatalogUrl ${siteCollectionUrl} ${skipFeatureDeployment}`);
+                        yield executeO365CLICommand(`spo app deploy --scope sitecollection --appCatalogUrl ${siteCollectionUrl} ${skipFeatureDeployment} --id ${appId}`);
                     }
                 }
                 else {
