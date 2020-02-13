@@ -29,7 +29,7 @@ async function main() {
                 }
             } else {
                 appId = await executeO365CLICommand(`spo app add -p ${appFilePath} ${overwrite}`);
-                await executeO365CLICommand(`spo app deploy --id ${appId} ${skipFeatureDeployment}`);
+                await executeO365CLICommand(`spo app deploy ${skipFeatureDeployment} --id ${appId}`);
             }
             core.info("✅ Upload and deployment complete.");
             core.setOutput("APP_ID", appId);
