@@ -25,7 +25,7 @@ async function main() {
                     core.setFailed("SITE_COLLECTION_URL not specified");
                 } else {
                     appId = await executeO365CLICommand(`spo app add -p ${appFilePath} --scope sitecollection --appCatalogUrl ${siteCollectionUrl} ${overwrite}`);
-                    await executeO365CLICommand(`spo app deploy --id ${appId} --scope sitecollection --appCatalogUrl ${siteCollectionUrl} ${skipFeatureDeployment}`);
+                    await executeO365CLICommand(`spo app deploy --scope sitecollection --appCatalogUrl ${siteCollectionUrl} ${skipFeatureDeployment} --id ${appId}`);
                 }
             } else {
                 appId = await executeO365CLICommand(`spo app add -p ${appFilePath} ${overwrite}`);
