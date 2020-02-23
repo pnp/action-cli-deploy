@@ -58,7 +58,7 @@ jobs:
 
     # Office 365 cli login action
     - name: Login to tenant
-      uses: pnp/action-cli-login@v1.0.0
+      uses: pnp/action-cli-login@v1.0.1
       with:
         ADMIN_USERNAME:  ${{ secrets.adminUsername }}
         ADMIN_PASSWORD:  ${{ secrets.adminPassword }}
@@ -69,7 +69,7 @@ jobs:
     # Option 1 - Deploy app at tenant level
     - name: Option 1 - Deploy app to tenant
       id: o365clideploy # optional - use if output needs to be used
-      uses: pnp/action-cli-deploy@v1.0.0
+      uses: pnp/action-cli-deploy@v1.0.1
       with:
         APP_FILE_PATH: sharepoint/solution/spfx-o365-cli-action.sppkg
         SKIP_FEATURE_DEPLOYMENT: true
@@ -78,7 +78,7 @@ jobs:
      
     # Option 2 - Deploy app to a site collection
     - name: Option 2 - Deploy app to a site collection
-      uses: pnp/action-cli-deploy@v1.0.0
+      uses: pnp/action-cli-deploy@v1.0.1
       with:
         APP_FILE_PATH: sharepoint/solution/spfx-o365-cli-action.sppkg
         SCOPE: sitecollection
@@ -98,3 +98,6 @@ If self-hosted runners are used for running the workflow, then please make sure 
 
 ### v1.0.0
 - Added inital 'Office 365 CLI deploy' GitHub action solving #2
+
+### v1.0.1
+- Added required code solving #4

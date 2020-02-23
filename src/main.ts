@@ -24,11 +24,11 @@ async function main() {
                     core.error("🚨 Site collection URL - SITE_COLLECTION_URL - is needed when scope is set to sitecollection.");
                     core.setFailed("SITE_COLLECTION_URL not specified");
                 } else {
-                    appId = await executeO365CLICommand(`spo app add -p ${appFilePath} --scope sitecollection --appCatalogUrl ${siteCollectionUrl} ${overwrite}`);
+                    appId = await executeO365CLICommand(`spo app add -p ${appFilePath} --scope sitecollection --appCatalogUrl ${siteCollectionUrl} ${overwrite}`, true);
                     await executeO365CLICommand(`spo app deploy --id ${appId} --scope sitecollection --appCatalogUrl ${siteCollectionUrl} ${skipFeatureDeployment}`);
                 }
             } else {
-                appId = await executeO365CLICommand(`spo app add -p ${appFilePath} ${overwrite}`);
+                appId = await executeO365CLICommand(`spo app add -p ${appFilePath} ${overwrite}`, true);
                 await executeO365CLICommand(`spo app deploy --id ${appId} ${skipFeatureDeployment}`);
             }
             core.info("✅ Upload and deployment complete.");
@@ -43,7 +43,7 @@ async function main() {
     }
 }
 
-async function executeO365CLICommand(command: string): Promise<any> {
+async function executeO365CLICommand(command: string, cleanOutput?: boolean): Promise<any> {
     let o365CLICommandOutput = '';
     const options: any = {};
     options.listeners = {
@@ -53,11 +53,16 @@ async function executeO365CLICommand(command: string): Promise<any> {
     };
     try {
         await exec(`"${o365CLIPath}" ${command}`, [], options);
-        return o365CLICommandOutput;
+        return cleanOutput ? cleanString(o365CLICommandOutput) : o365CLICommandOutput;
     }
     catch (err) {
         throw new Error(err);
     }
 }
+
+// remove any line breaks and spaces in a string
+function cleanString(input: string) { 
+	return input.replace(/[\r\n\s]+/gm, "" ); 
+} 
 
 main();

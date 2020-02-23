@@ -993,12 +993,12 @@ function main() {
                         core.setFailed("SITE_COLLECTION_URL not specified");
                     }
                     else {
-                        appId = yield executeO365CLICommand(`spo app add -p ${appFilePath} --scope sitecollection --appCatalogUrl ${siteCollectionUrl} ${overwrite}`);
+                        appId = yield executeO365CLICommand(`spo app add -p ${appFilePath} --scope sitecollection --appCatalogUrl ${siteCollectionUrl} ${overwrite}`, true);
                         yield executeO365CLICommand(`spo app deploy --id ${appId} --scope sitecollection --appCatalogUrl ${siteCollectionUrl} ${skipFeatureDeployment}`);
                     }
                 }
                 else {
-                    appId = yield executeO365CLICommand(`spo app add -p ${appFilePath} ${overwrite}`);
+                    appId = yield executeO365CLICommand(`spo app add -p ${appFilePath} ${overwrite}`, true);
                     yield executeO365CLICommand(`spo app deploy --id ${appId} ${skipFeatureDeployment}`);
                 }
                 core.info("✅ Upload and deployment complete.");
@@ -1015,7 +1015,7 @@ function main() {
         }
     });
 }
-function executeO365CLICommand(command) {
+function executeO365CLICommand(command, cleanOutput) {
     return __awaiter(this, void 0, void 0, function* () {
         let o365CLICommandOutput = '';
         const options = {};
@@ -1026,12 +1026,16 @@ function executeO365CLICommand(command) {
         };
         try {
             yield exec_1.exec(`"${o365CLIPath}" ${command}`, [], options);
-            return o365CLICommandOutput;
+            return cleanOutput ? cleanString(o365CLICommandOutput) : o365CLICommandOutput;
         }
         catch (err) {
             throw new Error(err);
         }
     });
+}
+// remove any line breaks and spaces in a string
+function cleanString(input) {
+    return input.replace(/[\r\n\s]+/gm, "");
 }
 main();
 
