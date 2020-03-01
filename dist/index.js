@@ -1026,16 +1026,12 @@ function executeO365CLICommand(command, cleanOutput) {
         };
         try {
             yield exec_1.exec(`"${o365CLIPath}" ${command}`, [], options);
-            return cleanOutput ? cleanString(o365CLICommandOutput) : o365CLICommandOutput;
+            return cleanOutput ? o365CLICommandOutput.trim() : o365CLICommandOutput;
         }
         catch (err) {
             throw new Error(err);
         }
     });
-}
-// remove any line breaks and spaces in a string
-function cleanString(input) {
-    return input.replace(/[\r\n\s]+/gm, "");
 }
 main();
 
