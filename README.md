@@ -98,3 +98,6 @@ If self-hosted runners are used for running the workflow, then please make sure 
 
 ### v1.0.0
 - Added inital 'Office 365 CLI deploy' GitHub action solving #2
+
+### v1.0.1
+- Fixed 'skipFeatureDeployment not included in spo app deploy command for Windows' solving #4
