@@ -1,17 +1,17 @@
-# Office 365 CLI deploy GitHub action
-GitHub action to deploy an app using Office 365 CLI
+# CLI for Microsoft 365 Deploy
+GitHub action to deploy an app using CLI for Microsoft 365
 
-![Office 365 CLI Deploy App](./images/cli-deploy.png)
+![CLI for Microsoft 365 Deploy App](./images/pnp-cli-microsoft365-blue.svg)
 
-This GitHub Action (created using typescript) uses [Office 365 CLI](https://pnp.github.io/office365-cli/), specifically the [spo app add](https://pnp.github.io/office365-cli/cmd/spo/app/app-add/), [spo app deploy](https://pnp.github.io/office365-cli/cmd/spo/app/app-deploy/) commands, to add and deploy.
+This GitHub Action (created using typescript) uses [CLI for Microsoft 365](https://pnp.github.io/cli-microsoft365/), specifically the [spo app add](https://pnp.github.io/cli-microsoft365/cmd/spo/app/app-add/), [spo app deploy](https://pnp.github.io/cli-microsoft365/cmd/spo/app/app-deploy/) commands, to add and deploy.
 
 ## Usage
 ### Pre-requisites
-Create a workflow `.yml` file in your `.github/workflows` directory. An [example workflow](#example-workflow---office-365-cli-deploy) is available below. For more information, reference the GitHub Help Documentation for [Creating a workflow file](https://help.github.com/en/articles/configuring-a-workflow#creating-a-workflow-file).
+Create a workflow `.yml` file in your `.github/workflows` directory. An [example workflow](#example-workflow---cli-for-microsoft-365-deploy) is available below. For more information, reference the GitHub Help Documentation for [Creating a workflow file](https://help.github.com/en/articles/configuring-a-workflow#creating-a-workflow-file).
 
 ## Dependencies on other GitHub Actions
 
-- [Office 365 CLI Login](https://github.com/pnp/action-cli-login) – **Required** . This action is dependant on `action-cli-login`. So in the workflow we need to run  `action-cli-login` before using this action.
+- [CLI for Microsoft 365 Login](https://github.com/pnp/action-cli-login) – **Required** . This action is dependant on `action-cli-login`. So in the workflow we need to run  `action-cli-login` before using this action.
 
 #### Optional requirement
 Since `action-cli-login` requires user name and password which are sensitive pieces of information, it would be ideal to store them securely. We can achieve this in a GitHub repo by using [secrets](https://help.github.com/en/actions/automating-your-workflow-with-github-actions/creating-and-using-encrypted-secrets). So, click on `settings` tab in your repo and add 2 new secrets:
@@ -29,11 +29,11 @@ These secrets are encrypted and can only be used by GitHub actions.
 ### Output
 - `APP_ID` : The id of the app that gets deployed
 
-### Example workflow - Office 365 CLI Deploy
+### Example workflow - CLI for Microsoft 365 Deploy
 On every `push` build the code, then login to Office 365 and then start deploying.
 
 ```yaml
-name: SPFx CICD with O365 CLI
+name: SPFx CICD with CLI for Microsoft 365
 
 on: [push]
 
@@ -56,38 +56,38 @@ jobs:
     ## Code to get the package omitted
     ##
 
-    # Office 365 cli login action
+    # CLI for Microsoft 365 login action
     - name: Login to tenant
-      uses: pnp/action-cli-login@v1.0.0
+      uses: pnp/action-cli-login@v2.0.0
       with:
         ADMIN_USERNAME:  ${{ secrets.adminUsername }}
         ADMIN_PASSWORD:  ${{ secrets.adminPassword }}
     
-    # Office 365 cli deploy app action
+    # CLI for Microsoft 365 deploy app action
     # Use either option 1 or option 2
     
     # Option 1 - Deploy app at tenant level
     - name: Option 1 - Deploy app to tenant
-      id: o365clideploy # optional - use if output needs to be used
-      uses: pnp/action-cli-deploy@v1.0.1
+      id: climicrosoft365deploy # optional - use if output needs to be used
+      uses: pnp/action-cli-deploy@v2.0.0
       with:
-        APP_FILE_PATH: sharepoint/solution/spfx-o365-cli-action.sppkg
+        APP_FILE_PATH: sharepoint/solution/spfx-cli-microsoft365-action.sppkg
         SKIP_FEATURE_DEPLOYMENT: true
         OVERWRITE: true
     # Option 1 - ends
      
     # Option 2 - Deploy app to a site collection
     - name: Option 2 - Deploy app to a site collection
-      uses: pnp/action-cli-deploy@v1.0.1
+      uses: pnp/action-cli-deploy@v2.0.0
       with:
-        APP_FILE_PATH: sharepoint/solution/spfx-o365-cli-action.sppkg
+        APP_FILE_PATH: sharepoint/solution/spfx-cli-microsoft365-action.sppkg
         SCOPE: sitecollection
         SITE_COLLECTION_URL: https://contoso.sharepoint.com/sites/teamsite
     # Option 2 - ends
 
     # Print the id of the app
     - name: Get the id of the app deployed
-      run: echo "The id of the app deployed is ${{ steps.o365clideploy.outputs.APP_ID }}"
+      run: echo "The id of the app deployed is ${{ steps.climicrosoft365deploy.outputs.APP_ID }}"
 ```
 
 
@@ -96,8 +96,12 @@ If self-hosted runners are used for running the workflow, then please make sure 
 
 ## Release notes
 
-### v1.0.0
-- Added inital 'Office 365 CLI deploy' GitHub action solving #2
+### v2.0.0
+
+- Renames action to 'CLI for Microsoft 365' 
 
 ### v1.0.1
 - Fixed 'skipFeatureDeployment not included in spo app deploy command for Windows' solving #4
+
+### v1.0.0
+- Added inital 'CLI for Microsoft 365 deploy' GitHub action solving #2

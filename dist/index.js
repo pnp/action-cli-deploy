@@ -974,11 +974,11 @@ const core = __importStar(__webpack_require__(470));
 const exec_1 = __webpack_require__(986);
 const io_1 = __webpack_require__(1);
 const fs_1 = __webpack_require__(747);
-let o365CLIPath;
+let cliMicrosoft365Path;
 function main() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            o365CLIPath = yield io_1.which("o365", true);
+            cliMicrosoft365Path = yield io_1.which("m365", true);
             const appFilePath = core.getInput("APP_FILE_PATH", { required: true });
             const scope = core.getInput("SCOPE", { required: false });
             const siteCollectionUrl = core.getInput("SITE_COLLECTION_URL", { required: false });
@@ -993,13 +993,13 @@ function main() {
                         core.setFailed("SITE_COLLECTION_URL not specified");
                     }
                     else {
-                        appId = yield executeO365CLICommand(`spo app add -p ${appFilePath} --scope sitecollection --appCatalogUrl ${siteCollectionUrl} ${overwrite}`, true);
-                        yield executeO365CLICommand(`spo app deploy --id ${appId} --scope sitecollection --appCatalogUrl ${siteCollectionUrl} ${skipFeatureDeployment}`);
+                        appId = yield executeCLIMicrosoft365Command(`spo app add -p ${appFilePath} --scope sitecollection --appCatalogUrl ${siteCollectionUrl} ${overwrite}`, true);
+                        yield executeCLIMicrosoft365Command(`spo app deploy --id ${appId} --scope sitecollection --appCatalogUrl ${siteCollectionUrl} ${skipFeatureDeployment}`);
                     }
                 }
                 else {
-                    appId = yield executeO365CLICommand(`spo app add -p ${appFilePath} ${overwrite}`, true);
-                    yield executeO365CLICommand(`spo app deploy --id ${appId} ${skipFeatureDeployment}`);
+                    appId = yield executeCLIMicrosoft365Command(`spo app add -p ${appFilePath} ${overwrite}`, true);
+                    yield executeCLIMicrosoft365Command(`spo app deploy --id ${appId} ${skipFeatureDeployment}`);
                 }
                 core.info("✅ Upload and deployment complete.");
                 core.setOutput("APP_ID", appId);
@@ -1015,18 +1015,18 @@ function main() {
         }
     });
 }
-function executeO365CLICommand(command, cleanOutput) {
+function executeCLIMicrosoft365Command(command, cleanOutput) {
     return __awaiter(this, void 0, void 0, function* () {
-        let o365CLICommandOutput = '';
+        let cliMicrosoft365CommandOutput = '';
         const options = {};
         options.listeners = {
             stdout: (data) => {
-                o365CLICommandOutput += data.toString();
+                cliMicrosoft365CommandOutput += data.toString();
             }
         };
         try {
-            yield exec_1.exec(`"${o365CLIPath}" ${command}`, [], options);
-            return cleanOutput ? o365CLICommandOutput.trim() : o365CLICommandOutput;
+            yield exec_1.exec(`"${cliMicrosoft365Path}" ${command}`, [], options);
+            return cleanOutput ? cliMicrosoft365CommandOutput.trim() : cliMicrosoft365CommandOutput;
         }
         catch (err) {
             throw new Error(err);
