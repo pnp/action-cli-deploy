@@ -3,11 +3,11 @@ import { exec } from '@actions/exec';
 import { which } from '@actions/io';
 import { existsSync } from 'fs';
 
-let o365CLIPath: string;
+let cliMicrosoft365Path: string;
 
 async function main() {
     try {
-        o365CLIPath = await which("o365", true);
+        cliMicrosoft365Path = await which("m365", true);
 
         const appFilePath: string = core.getInput("APP_FILE_PATH", { required: true });
         const scope: string = core.getInput("SCOPE", { required: false });
@@ -24,12 +24,12 @@ async function main() {
                     core.error("🚨 Site collection URL - SITE_COLLECTION_URL - is needed when scope is set to sitecollection.");
                     core.setFailed("SITE_COLLECTION_URL not specified");
                 } else {
-                    appId = await executeO365CLICommand(`spo app add -p ${appFilePath} --scope sitecollection --appCatalogUrl ${siteCollectionUrl} ${overwrite}`, true);
-                    await executeO365CLICommand(`spo app deploy --id ${appId} --scope sitecollection --appCatalogUrl ${siteCollectionUrl} ${skipFeatureDeployment}`);
+                    appId = await executeCLIMicrosoft365Command(`spo app add -p ${appFilePath} --scope sitecollection --appCatalogUrl ${siteCollectionUrl} ${overwrite}`, true);
+                    await executeCLIMicrosoft365Command(`spo app deploy --id ${appId} --scope sitecollection --appCatalogUrl ${siteCollectionUrl} ${skipFeatureDeployment}`);
                 }
             } else {
-                appId = await executeO365CLICommand(`spo app add -p ${appFilePath} ${overwrite}`, true);
-                await executeO365CLICommand(`spo app deploy --id ${appId} ${skipFeatureDeployment}`);
+                appId = await executeCLIMicrosoft365Command(`spo app add -p ${appFilePath} ${overwrite}`, true);
+                await executeCLIMicrosoft365Command(`spo app deploy --id ${appId} ${skipFeatureDeployment}`);
             }
             core.info("✅ Upload and deployment complete.");
             core.setOutput("APP_ID", appId);
@@ -43,17 +43,17 @@ async function main() {
     }
 }
 
-async function executeO365CLICommand(command: string, cleanOutput?: boolean): Promise<any> {
-    let o365CLICommandOutput = '';
+async function executeCLIMicrosoft365Command(command: string, cleanOutput?: boolean): Promise<any> {
+    let cliMicrosoft365CommandOutput = '';
     const options: any = {};
     options.listeners = {
         stdout: (data: Buffer) => {
-            o365CLICommandOutput += data.toString();
+            cliMicrosoft365CommandOutput += data.toString();
         }
     };
     try {
-        await exec(`"${o365CLIPath}" ${command}`, [], options);
-        return cleanOutput ? o365CLICommandOutput.trim() : o365CLICommandOutput;
+        await exec(`"${cliMicrosoft365Path}" ${command}`, [], options);
+        return cleanOutput ? cliMicrosoft365CommandOutput.trim() : cliMicrosoft365CommandOutput;
     }
     catch (err) {
         throw new Error(err);

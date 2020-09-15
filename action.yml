@@ -1,5 +1,5 @@
-name: 'Office 365 CLI Deploy App'
-description: 'Deploy an app using Office 365 CLI'
+name: 'CLI for Microsoft 365 Deploy App'
+description: 'Deploy an app using CLI for Microsoft 365'
 inputs:
   APP_FILE_PATH:  
     description: 'Relative path of the app in your repo'
