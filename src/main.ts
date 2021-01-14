@@ -25,10 +25,12 @@ async function main() {
                     core.setFailed("SITE_COLLECTION_URL not specified");
                 } else {
                     appId = await executeCLIMicrosoft365Command(`spo app add -p ${appFilePath} --scope sitecollection --appCatalogUrl ${siteCollectionUrl} ${overwrite}`, true);
+                    appId = appId.replace('UniqueId: ', '');
                     await executeCLIMicrosoft365Command(`spo app deploy --id ${appId} --scope sitecollection --appCatalogUrl ${siteCollectionUrl} ${skipFeatureDeployment}`);
                 }
             } else {
                 appId = await executeCLIMicrosoft365Command(`spo app add -p ${appFilePath} ${overwrite}`, true);
+                appId = appId.replace('UniqueId: ', '');
                 await executeCLIMicrosoft365Command(`spo app deploy --id ${appId} ${skipFeatureDeployment}`);
             }
             core.info("✅ Upload and deployment complete.");
