@@ -19,6 +19,16 @@ Since `action-cli-login` requires user name and password which are sensitive pie
 - `adminPassword` - store the password of that user in this.
 These secrets are encrypted and can only be used by GitHub actions.
 
+### Compatibility matrix
+
+The following table lists which versions of the GitHub action are compatible with which versions of the CLI for Microsoft 365.
+
+Version | CLI for Microsoft 365 version
+--- | ---
+v3.0.0 | v6.0.0
+v2.0.2 | v5.8.0
+v1.0.0 | v2.5.0
+
 ### Inputs
 - `APP_FILE_PATH` : **Required** Relative path of the app in your repo
 - `SCOPE` : Scope of the app catalog: `tenant|sitecollection`. Default is `tenant`
@@ -95,6 +105,10 @@ jobs:
 If self-hosted runners are used for running the workflow, then please make sure that they have `PowerShell` or `bash` installed on them. 
 
 ## Release notes
+
+### v3.0.0
+
+- Ensured compatibility with CLI for Microsoft 365 v6.0.0
 
 ### v2.0.2
 
