@@ -96,6 +96,10 @@ If self-hosted runners are used for running the workflow, then please make sure 
 
 ## Release notes
 
+### v2.0.2
+
+- Fixes bug where app ID was invalid
+
 ### v2.0.0
 
 - Renames action to 'CLI for Microsoft 365' 
