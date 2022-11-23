@@ -24,11 +24,13 @@ async function main() {
                     core.error("🚨 Site collection URL - SITE_COLLECTION_URL - is needed when scope is set to sitecollection.");
                     core.setFailed("SITE_COLLECTION_URL not specified");
                 } else {
-                    appId = await executeCLIMicrosoft365Command(`spo app add -p ${appFilePath} --scope sitecollection --appCatalogUrl ${siteCollectionUrl} ${overwrite}`, true);
+                    const app = await executeCLIMicrosoft365Command(`spo app add -p ${appFilePath} --scope sitecollection --appCatalogUrl ${siteCollectionUrl} ${overwrite}`, true);
+                    appId = JSON.parse(app).UniqueId;
                     await executeCLIMicrosoft365Command(`spo app deploy --id ${appId} --scope sitecollection --appCatalogUrl ${siteCollectionUrl} ${skipFeatureDeployment}`);
                 }
             } else {
-                appId = await executeCLIMicrosoft365Command(`spo app add -p ${appFilePath} ${overwrite}`, true);
+                const app = await executeCLIMicrosoft365Command(`spo app add -p ${appFilePath} ${overwrite}`, true);
+                appId = JSON.parse(app).UniqueId;
                 await executeCLIMicrosoft365Command(`spo app deploy --id ${appId} ${skipFeatureDeployment}`);
             }
             core.info("✅ Upload and deployment complete.");
