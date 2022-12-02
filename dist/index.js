@@ -2879,9 +2879,9 @@ function main() {
                         core.setFailed("SITE_COLLECTION_URL not specified");
                     }
                     else {
-                        const app = yield executeCLIMicrosoft365Command(`spo app add -p ${appFilePath} --scope sitecollection --appCatalogUrl ${siteCollectionUrl} ${overwrite}`, true);
+                        const app = yield executeCLIMicrosoft365Command(`spo app add -p ${appFilePath} --appCatalogScope sitecollection --appCatalogUrl ${siteCollectionUrl} ${overwrite}`, true);
                         appId = JSON.parse(app).UniqueId;
-                        yield executeCLIMicrosoft365Command(`spo app deploy --id ${appId} --scope sitecollection --appCatalogUrl ${siteCollectionUrl} ${skipFeatureDeployment}`);
+                        yield executeCLIMicrosoft365Command(`spo app deploy --id ${appId} --appCatalogScope sitecollection --appCatalogUrl ${siteCollectionUrl} ${skipFeatureDeployment}`);
                     }
                 }
                 else {
