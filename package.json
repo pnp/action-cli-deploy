@@ -1,6 +1,6 @@
 {
   "name": "@pnp/action-cli-deploy",
-  "version": "3.0.0",
+  "version": "3.0.1",
   "description": "GitHub Action to deploy an app using CLI for Microsoft 365",
   "main": "dist/index.js",
   "scripts": {

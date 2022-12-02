@@ -106,6 +106,10 @@ If self-hosted runners are used for running the workflow, then please make sure 
 
 ## Release notes
 
+### v3.0.1
+
+- Fixes compatibility bug with CLI for Microsoft 365 v6.0.0
+
 ### v3.0.0
 
 - Ensured compatibility with CLI for Microsoft 365 v6.0.0
