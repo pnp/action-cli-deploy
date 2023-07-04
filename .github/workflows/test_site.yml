@@ -1,0 +1,33 @@
+on: [workflow_dispatch]
+
+jobs:
+  cli_deploy_job_site:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [18.x]
+
+    name: CLI Deploy Job
+    
+    steps:  
+      - name: Login to tenant
+        uses: pnp/action-cli-login
+        id: login
+        with:
+          ADMIN_USERNAME: ${{ secrets.ADMIN_USERNAME }}
+          ADMIN_PASSWORD: ${{ secrets.ADMIN_PASSWORD }}
+      
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: CLI for Microsoft 365 Deploy
+        uses: ./
+        id: deploy
+        with:
+          APP_FILE_PATH: sharepoint/solution/test.sppkg
+          SCOPE: sitecollection
+          SITE_COLLECTION_URL: https://tenant.sharepoint.com/sites/siteapps
+
+      - name: Get the id of the app deployed
+        run: echo "The id of the app deployed is ${{ steps.deploy.outputs.APP_ID }}"
