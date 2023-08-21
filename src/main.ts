@@ -1,65 +1,44 @@
 import * as core from '@actions/core';
-import { exec } from '@actions/exec';
-import { which } from '@actions/io';
+import { getOptions, execCommand } from './utils';
+import { Options, validate } from './validate';
+import { constants } from './constants';
 import { existsSync } from 'fs';
+import { getAddCommand, getDeployCommand } from './commands';
+import { SpoApp } from './models';
 
-let cliMicrosoft365Path: string;
+async function run(): Promise<void> {
 
-async function main() {
-    try {
-        cliMicrosoft365Path = await which("m365", true);
+  const options: Options = getOptions([
+    constants.ACTION_APP_FILE_PATH,
+    constants.ACTION_SCOPE,
+    constants.ACTION_SITE_COLLECTION_URL,
+    constants.ACTION_SKIP_FEATURE_DEPLOYMENT,
+    constants.ACTION_OVERWRITE
+  ]);
 
-        const appFilePath: string = core.getInput("APP_FILE_PATH", { required: true });
-        const scope: string = core.getInput("SCOPE", { required: false });
-        const siteCollectionUrl: string = core.getInput("SITE_COLLECTION_URL", { required: false });
-        const skipFeatureDeployment: string = core.getInput("SKIP_FEATURE_DEPLOYMENT", { required: false }) == "true" ? "--skipFeatureDeployment" : "";
-        const overwrite: string = core.getInput("OVERWRITE", { required: false }) == "true" ? "--overwrite" : "";
+  try {
 
-        let appId: string;
+    validate(options);
+        
+    if (existsSync(options.APP_FILE_PATH)) {
+      const addCommand = getAddCommand(options);
+      core.info(`Adding app with command: ${addCommand}`);
+      const app = await execCommand(`${constants.CLI_PREFIX} ${addCommand}`);
+      const { UniqueId: appId } = JSON.parse(app.stdout) as SpoApp;
+      core.info(`APP_ID: ${appId}`);
+            
+      const deployCommand = getDeployCommand(options, appId);
+      core.info(`Deploying app with command: ${deployCommand}`);
 
-        if (existsSync(appFilePath)) {
-            core.info("ℹ️ Starting upload and deployment...");
-            if (scope == "sitecollection") {
-                if (!siteCollectionUrl.length) {
-                    core.error("🚨 Site collection URL - SITE_COLLECTION_URL - is needed when scope is set to sitecollection.");
-                    core.setFailed("SITE_COLLECTION_URL not specified");
-                } else {
-                    const app = await executeCLIMicrosoft365Command(`spo app add -p ${appFilePath} --appCatalogScope sitecollection --appCatalogUrl ${siteCollectionUrl} ${overwrite}`, true);
-                    appId = JSON.parse(app).UniqueId;
-                    await executeCLIMicrosoft365Command(`spo app deploy --id ${appId} --appCatalogScope sitecollection --appCatalogUrl ${siteCollectionUrl} ${skipFeatureDeployment}`);
-                }
-            } else {
-                const app = await executeCLIMicrosoft365Command(`spo app add -p ${appFilePath} ${overwrite}`, true);
-                appId = JSON.parse(app).UniqueId;
-                await executeCLIMicrosoft365Command(`spo app deploy --id ${appId} ${skipFeatureDeployment}`);
-            }
-            core.info("✅ Upload and deployment complete.");
-            core.setOutput("APP_ID", appId);
-        } else {
-            core.error("🚨 Please check if the app file path - APP_FILE_PATH - is correct.");
-            core.setFailed("Path incorrect");
-        }
-    } catch (err) {
-        core.error("🚨 Deployment failed.");
-        core.setFailed(err);
+      await execCommand(`${constants.CLI_PREFIX} ${deployCommand}`);
+      core.setOutput('APP_ID', appId);
     }
+
+  } catch (err: unknown) {
+    const error = err as Error;
+    core.error(`🚨 ${error.message}`);
+    core.setFailed(error);
+  }
 }
 
-async function executeCLIMicrosoft365Command(command: string, cleanOutput?: boolean): Promise<any> {
-    let cliMicrosoft365CommandOutput = '';
-    const options: any = {};
-    options.listeners = {
-        stdout: (data: Buffer) => {
-            cliMicrosoft365CommandOutput += data.toString();
-        }
-    };
-    try {
-        await exec(`"${cliMicrosoft365Path}" ${command}`, [], options);
-        return cleanOutput ? cliMicrosoft365CommandOutput.trim() : cliMicrosoft365CommandOutput;
-    }
-    catch (err) {
-        throw new Error(err);
-    }
-}
-
-main();
+run();
