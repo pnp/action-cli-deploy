@@ -15,8 +15,9 @@ Create a workflow `.yml` file in your `.github/workflows` directory. An [example
 
 #### Optional requirement
 Since `action-cli-login` requires user name and password which are sensitive pieces of information, it would be ideal to store them securely. We can achieve this in a GitHub repo by using [secrets](https://help.github.com/en/actions/automating-your-workflow-with-github-actions/creating-and-using-encrypted-secrets). So, click on `settings` tab in your repo and add 2 new secrets:
-- `adminUsername` - store the admin user name in this (e.g. user@contoso.onmicrosoft.com)
-- `adminPassword` - store the password of that user in this.
+- `ADMIN_USERNAME` - store the admin user name in this (e.g. user@contoso.onmicrosoft.com)
+- `ADMIN_PASSWORD` - store the password of that user in this.
+
 These secrets are encrypted and can only be used by GitHub actions.
 
 ### Compatibility matrix
@@ -25,7 +26,7 @@ The following table lists which versions of the GitHub action are compatible wit
 
 Version | CLI for Microsoft 365 version
 --- | ---
-v3.0.0 | v6.0.0
+^v3.0.0 | v6.0.0
 v2.0.2 | v5.8.0
 v1.0.0 | v2.5.0
 
@@ -58,7 +59,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version: [10.x]
+        node-version: [18.x]
     
     steps:
     
@@ -68,10 +69,10 @@ jobs:
 
     # CLI for Microsoft 365 login action
     - name: Login to tenant
-      uses: pnp/action-cli-login@v2.0.0
+      uses: pnp/action-cli-login@v2
       with:
-        ADMIN_USERNAME:  ${{ secrets.adminUsername }}
-        ADMIN_PASSWORD:  ${{ secrets.adminPassword }}
+        ADMIN_USERNAME:  ${{ secrets.ADMIN_USERNAME }}
+        ADMIN_PASSWORD:  ${{ secrets.ADMIN_PASSWORD }}
     
     # CLI for Microsoft 365 deploy app action
     # Use either option 1 or option 2
@@ -79,7 +80,7 @@ jobs:
     # Option 1 - Deploy app at tenant level
     - name: Option 1 - Deploy app to tenant
       id: climicrosoft365deploy # optional - use if output needs to be used
-      uses: pnp/action-cli-deploy@v2.0.0
+      uses: pnp/action-cli-deploy@v4
       with:
         APP_FILE_PATH: sharepoint/solution/spfx-cli-microsoft365-action.sppkg
         SKIP_FEATURE_DEPLOYMENT: true
@@ -88,7 +89,7 @@ jobs:
      
     # Option 2 - Deploy app to a site collection
     - name: Option 2 - Deploy app to a site collection
-      uses: pnp/action-cli-deploy@v2.0.0
+      uses: pnp/action-cli-deploy@v4
       with:
         APP_FILE_PATH: sharepoint/solution/spfx-cli-microsoft365-action.sppkg
         SCOPE: sitecollection
@@ -100,30 +101,5 @@ jobs:
       run: echo "The id of the app deployed is ${{ steps.climicrosoft365deploy.outputs.APP_ID }}"
 ```
 
-
 #### Self-hosted runners
 If self-hosted runners are used for running the workflow, then please make sure that they have `PowerShell` or `bash` installed on them. 
-
-## Release notes
-
-### v3.0.1
-
-- Fixes compatibility bug with CLI for Microsoft 365 v6.0.0
-
-### v3.0.0
-
-- Ensured compatibility with CLI for Microsoft 365 v6.0.0
-
-### v2.0.2
-
-- Fixes bug where app ID was invalid
-
-### v2.0.0
-
-- Renames action to 'CLI for Microsoft 365' 
-
-### v1.0.1
-- Fixed 'skipFeatureDeployment not included in spo app deploy command for Windows' solving #4
-
-### v1.0.0
-- Added inital 'CLI for Microsoft 365 deploy' GitHub action solving #2
