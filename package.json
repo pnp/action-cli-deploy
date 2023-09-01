@@ -14,7 +14,7 @@
   },
   "scripts": {
     "build": "npm run clean && npm run tsc && ncc build -m --source-map",
-    "build:watch": "ncc build --watch --source-map",
+    "build:watch": "ncc build --watch -m --source-map",
     "clean": "rimraf ./lib ./dist",
     "lint": "eslint --ext .ts src",
     "test": "npm run lint && npm run test:cov",
