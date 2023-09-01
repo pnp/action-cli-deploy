@@ -93,3 +93,6 @@ typings/
 
 # macOS
 .DS_Store
+
+# act secret file
+*.secrets
