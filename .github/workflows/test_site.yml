@@ -6,20 +6,20 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [18.x]
+        node-version: [20.x]
 
     name: CLI Deploy Job
     
     steps:  
-      - name: Login to tenant
-        uses: pnp/action-cli-login@v2
+      - name: Log in to tenant
+        uses: pnp/action-cli-login@v3
         id: login
         with:
           ADMIN_USERNAME: ${{ secrets.ADMIN_USERNAME }}
           ADMIN_PASSWORD: ${{ secrets.ADMIN_PASSWORD }}
       
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: CLI for Microsoft 365 Deploy
         uses: ./
