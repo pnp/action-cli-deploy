@@ -41,7 +41,7 @@ v1.0.0 | v2.5.0
 - `APP_ID` : The id of the app that gets deployed
 
 ### Example workflow - CLI for Microsoft 365 Deploy
-On every `push` build the code, then login to Office 365 and then start deploying.
+On every `push` build the code, then log in to Office 365 and then start deploying.
 
 ```yaml
 name: SPFx CICD with CLI for Microsoft 365
@@ -69,7 +69,7 @@ jobs:
 
     # CLI for Microsoft 365 login action
     - name: Login to tenant
-      uses: pnp/action-cli-login@v2
+      uses: pnp/action-cli-login@v3
       with:
         ADMIN_USERNAME:  ${{ secrets.ADMIN_USERNAME }}
         ADMIN_PASSWORD:  ${{ secrets.ADMIN_PASSWORD }}
@@ -80,7 +80,7 @@ jobs:
     # Option 1 - Deploy app at tenant level
     - name: Option 1 - Deploy app to tenant
       id: climicrosoft365deploy # optional - use if output needs to be used
-      uses: pnp/action-cli-deploy@v4
+      uses: pnp/action-cli-deploy@v5
       with:
         APP_FILE_PATH: sharepoint/solution/spfx-cli-microsoft365-action.sppkg
         SKIP_FEATURE_DEPLOYMENT: true
@@ -89,7 +89,7 @@ jobs:
      
     # Option 2 - Deploy app to a site collection
     - name: Option 2 - Deploy app to a site collection
-      uses: pnp/action-cli-deploy@v4
+      uses: pnp/action-cli-deploy@v5
       with:
         APP_FILE_PATH: sharepoint/solution/spfx-cli-microsoft365-action.sppkg
         SCOPE: sitecollection
