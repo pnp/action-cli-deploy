@@ -21,6 +21,8 @@ async function run(): Promise<void> {
     validate(options);
         
     if (existsSync(options.APP_FILE_PATH)) {
+      await execCommand(`${constants.CLI_PREFIX} setup --scripting --output none`);
+
       const addCommand = getAddCommand(options);
       core.info(`Adding app with command: ${addCommand}`);
       const app = await execCommand(`${constants.CLI_PREFIX} ${addCommand}`);
