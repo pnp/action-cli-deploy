@@ -7,18 +7,14 @@ This GitHub Action (created using typescript) uses [CLI for Microsoft 365](https
 
 ## Usage
 ### Pre-requisites
-Create a workflow `.yml` file in your `.github/workflows` directory. An [example workflow](#example-workflow---cli-for-microsoft-365-deploy) is available below. For more information, reference the GitHub Help Documentation for [Creating a workflow file](https://help.github.com/en/articles/configuring-a-workflow#creating-a-workflow-file).
+Create a workflow `.yml` file in your `.github/workflows` directory. An [example workflow](#example-workflow---cli-for-microsoft-365-deploy) is available below. For more information, reference the GitHub Help Documentation for [Creating a workflow file](https://docs.github.com/en/actions/writing-workflows/quickstart).
 
 ## Dependencies on other GitHub Actions
 
 - [CLI for Microsoft 365 Login](https://github.com/pnp/action-cli-login) – **Required** . This action is dependant on `action-cli-login`. So in the workflow we need to run  `action-cli-login` before using this action.
 
 #### Optional requirement
-Since `action-cli-login` requires user name and password which are sensitive pieces of information, it would be ideal to store them securely. We can achieve this in a GitHub repo by using [secrets](https://help.github.com/en/actions/automating-your-workflow-with-github-actions/creating-and-using-encrypted-secrets). So, click on `settings` tab in your repo and add 2 new secrets:
-- `ADMIN_USERNAME` - store the admin user name in this (e.g. user@contoso.onmicrosoft.com)
-- `ADMIN_PASSWORD` - store the password of that user in this.
-
-These secrets are encrypted and can only be used by GitHub actions.
+Since `action-cli-login` requires sensitive pieces of information, it would be ideal to store them securely. We can achieve this in a GitHub repo by using [secrets](https://help.github.com/en/actions/automating-your-workflow-with-github-actions/creating-and-using-encrypted-secrets). Consult the [action-cli-login](https://github.com/pnp/action-cli-login) docs to check which information you need.
 
 ### Compatibility matrix
 
@@ -32,10 +28,10 @@ v1.0.0 | v2.5.0
 
 ### Inputs
 - `APP_FILE_PATH` : **Required** Relative path of the app in your repo
-- `SCOPE` : Scope of the app catalog: `tenant|sitecollection`. Default is `tenant`
+- `SCOPE` : Scope of the app catalog: `tenant`, `sitecollection`. Default is `tenant`
 - `SITE_COLLECTION_URL` : The URL of the site collection where the solution package will be added. Required if scope is set to `sitecollection`
-- `SKIP_FEATURE_DEPLOYMENT` : `true|false` If the app supports tenant-wide deployment, deploy it to the whole tenant. Default is `false`
-- `OVERWRITE` : `true|false` Set to overwrite the existing package file. Default is `false`
+- `SKIP_FEATURE_DEPLOYMENT` : `true` or `false`. If the app supports tenant-wide deployment, deploy it to the whole tenant. Default is `false`
+- `OVERWRITE` : `true`, `false`. Set to overwrite the existing package file. Default is `false`
 
 ### Output
 - `APP_ID` : The id of the app that gets deployed
@@ -59,7 +55,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version: [18.x]
+        node-version: [22.x]
     
     steps:
     
@@ -68,11 +64,11 @@ jobs:
     ##
 
     # CLI for Microsoft 365 login action
-    - name: Login to tenant
+    - name: Log in to tenant
       uses: pnp/action-cli-login@v3
       with:
-        ADMIN_USERNAME:  ${{ secrets.ADMIN_USERNAME }}
-        ADMIN_PASSWORD:  ${{ secrets.ADMIN_PASSWORD }}
+        TENANT: ${{ secrets.TENANT }}
+        APP_ID: ${{ secrets.APP_ID }}
     
     # CLI for Microsoft 365 deploy app action
     # Use either option 1 or option 2
