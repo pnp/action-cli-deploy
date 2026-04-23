@@ -19,6 +19,7 @@ export default [
       '@stylistic': stylistic
     },
     languageOptions: {
+      parser: tseslint.parser,
       parserOptions: {
         sourceType: 'module',
         ecmaVersion: 'latest',
