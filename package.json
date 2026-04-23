@@ -18,7 +18,7 @@
   },
   "scripts": {
     "build": "npm run clean && npm run tsc && npm run bundle",
-    "bundle": "esbuild src/main.ts --bundle --platform=node --format=esm --minify --outfile=dist/index.js --sourcemap --banner:js=\"import { createRequire } from 'module'; const require = createRequire(import.meta.url);\"",
+    "bundle": "esbuild src/main.ts --bundle --platform=node --format=esm --outfile=dist/index.js --sourcemap --banner:js=\"import { createRequire } from 'module'; const require = createRequire(import.meta.url);\"",
     "bundle:watch": "npm run bundle -- --watch",
     "clean": "rimraf ./lib ./dist",
     "lint": "eslint src",
