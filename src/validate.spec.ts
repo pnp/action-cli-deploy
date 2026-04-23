@@ -1,5 +1,5 @@
 import * as assert from 'assert';
-import { Options, Scope, validate } from './validate';
+import { Options, Scope, validate } from './validate.js';
 
 describe('validate', () => {
 

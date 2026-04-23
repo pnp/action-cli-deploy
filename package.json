@@ -3,7 +3,11 @@
   "version": "6.0.0",
   "description": "GitHub Action to deploy an app using CLI for Microsoft 365",
   "license": "MIT",
+  "type": "module",
   "main": "lib/main.js",
+  "engines": {
+    "node": ">=20.19"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/pnp/action-cli-deploy.git"
@@ -13,16 +17,17 @@
     "url": "https://github.com/pnp/action-cli-deploy/issues"
   },
   "scripts": {
-    "build": "npm run clean && npm run tsc && ncc build -m --source-map",
-    "build:watch": "ncc build --watch -m --source-map",
+    "build": "npm run clean && npm run tsc && npm run bundle",
+    "bundle": "esbuild src/main.ts --bundle --platform=node --format=esm --minify --outfile=dist/index.js --sourcemap --banner:js=\"import { createRequire } from 'module'; const require = createRequire(import.meta.url);\"",
+    "bundle:watch": "npm run bundle -- --watch",
     "clean": "rimraf ./lib ./dist",
-    "lint": "eslint --ext .ts src",
+    "lint": "eslint src",
     "test": "npm run lint && npm run test:cov",
     "test:test": "mocha",
     "test:cov": "c8 npm run test:test",
     "tsc": "tsc -p .",
     "tsc:watch": "tsc -w -p .",
-    "watch": "npm run clean && npm run tsc && concurrently \"npm:tsc:watch\" \"npm:build:watch\""
+    "watch": "npm run clean && npm run tsc && concurrently \"npm:tsc:watch\" \"npm:bundle:watch\""
   },
   "keywords": [
     "adaptive card",
@@ -108,24 +113,25 @@
     "Trinder, Garry <garry.trinder@live.com>"
   ],
   "dependencies": {
-    "@actions/core": "^2.0.3",
-    "@actions/exec": "^2.0.0",
-    "@actions/io": "^2.0.0"
+    "@actions/core": "^3.0.1",
+    "@actions/exec": "^3.0.0",
+    "@actions/io": "^3.0.2"
   },
   "devDependencies": {
-    "@types/mocha": "10.0.6",
-    "@types/node": "^24.10.4",
-    "@types/sinon": "10.0.16",
-    "@typescript-eslint/eslint-plugin": "6.20.0",
-    "@typescript-eslint/parser": "6.20.0",
-    "@vercel/ncc": "^0.38.4",
+    "@eslint/js": "^10.0.1",
+    "@stylistic/eslint-plugin": "^5.10.0",
+    "@types/mocha": "^10.0.10",
+    "@types/node": "^24.12.2",
+    "@types/sinon": "^21.0.1",
     "c8": "^11.0.0",
     "concurrently": "^9.2.1",
-    "eslint": "8.56.0",
+    "esbuild": "^0.28.0",
+    "eslint": "^10.2.1",
+    "esmock": "^2.7.1",
     "mocha": "^11.7.5",
     "rimraf": "^6.1.3",
-    "sinon": "15.2.0",
-    "source-map-support": "0.5.21",
-    "typescript": "5.2.2"
+    "sinon": "^21.1.2",
+    "typescript": "^6.0.3",
+    "typescript-eslint": "^8.59.0"
   }
 }

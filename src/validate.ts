@@ -1,4 +1,4 @@
-import { isNullOrEmpty } from './utils';
+import { isNullOrEmpty } from './utils.js';
 
 export interface Options {
   APP_FILE_PATH: string;

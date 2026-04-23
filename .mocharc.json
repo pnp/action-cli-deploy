@@ -4,7 +4,9 @@
   ],
   "spec": "lib/**/*.spec.js",
   "reporter": "min",
-  "require": "source-map-support/register",
+  "node-option": [
+    "import=esmock"
+  ],
   "watch": "lib/**/*.js",
   "timeout": 10000,
   "logpanel": true

@@ -5,7 +5,7 @@ inputs:
     description: Relative path of the app in your repo.
     required: true
   SCOPE:
-    description: Scope of the app catalog: tenant or site collection. Default is tenant.
+    description: 'Scope of the app catalog: tenant or site collection. Default is tenant.'
     required: false
     default: tenant
   SITE_COLLECTION_URL:

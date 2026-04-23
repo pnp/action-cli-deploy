@@ -1,10 +1,7 @@
-import { getOptions, isNullOrEmpty, isStringBoolean } from './utils';
-import * as utils from './utils';
-import { Options, Scope } from './validate';
-import { constants } from './constants';
-import * as sinon from 'sinon';
-import * as exec from '@actions/exec';
-import * as core from '@actions/core';
+import esmock from 'esmock';
+import { getOptions, isNullOrEmpty, isStringBoolean } from './utils.js';
+import { Options, Scope } from './validate.js';
+import { constants } from './constants.js';
 import * as assert from 'assert';
 
 describe('utils', () => {
@@ -83,18 +80,25 @@ describe('utils', () => {
       assert.deepEqual(actual, expected);
     });
 
-    it('returns correct object with parameters', () => {
+    it('returns correct object with parameters', async () => {
       const optionsList: string[] = ['APP_FILE_PATH', 'SCOPE', 'SITE_COLLECTION_URL', 'SKIP_FEATURE_DEPLOYMENT', 'OVERWRITE'];
-            
-      const inputStub = sinon.stub(core, 'getInput');
-      inputStub.withArgs('APP_FILE_PATH').returns('solution.sppkg');
-      inputStub.withArgs('SCOPE').returns('tenant');
-      inputStub.withArgs('SITE_COLLECTION_URL').returns('');
-      inputStub.withArgs('SKIP_FEATURE_DEPLOYMENT').returns('false');
-      inputStub.withArgs('OVERWRITE').returns('true');
 
-      const actual = getOptions(optionsList);
-            
+      const inputs: Record<string, string> = {
+        APP_FILE_PATH: 'solution.sppkg',
+        SCOPE: 'tenant',
+        SITE_COLLECTION_URL: '',
+        SKIP_FEATURE_DEPLOYMENT: 'false',
+        OVERWRITE: 'true'
+      };
+
+      const utilsMocked = await esmock<typeof import('./utils.js')>('./utils.js', {
+        '@actions/core': {
+          getInput: (name: string) => inputs[name] ?? ''
+        }
+      });
+
+      const actual = utilsMocked.getOptions(optionsList);
+
       const expected: Options = {
         APP_FILE_PATH: 'solution.sppkg',
         SCOPE: 'tenant' as Scope,
@@ -103,7 +107,6 @@ describe('utils', () => {
         OVERWRITE: true
       };
       assert.deepEqual(actual, expected);
-      inputStub.restore();
     });
   });
 
@@ -112,17 +115,17 @@ describe('utils', () => {
     it('returns correct object', async () => {
       const command = `${constants.CLI_PREFIX} spo app add --filePath solution.sppkg`;
 
-      const execStub = sinon.stub(exec, 'exec').callsFake(async (command, args, options) => {
-        options!.listeners!.stdout!(Buffer.from('hello world'));
-        return 0;
+      const utilsMocked = await esmock<typeof import('./utils.js')>('./utils.js', {
+        '@actions/exec': {
+          exec: async (_command: string, _args: string[], options: { listeners?: { stdout?: (data: Buffer) => void } }) => {
+            options!.listeners!.stdout!(Buffer.from('hello world'));
+            return 0;
+          }
+        }
       });
 
-      const { stdout } = await utils.execCommand(command);
-      try {
-        assert.equal(stdout, 'hello world');
-      } finally {
-        execStub.restore();
-      }
+      const { stdout } = await utilsMocked.execCommand(command);
+      assert.equal(stdout, 'hello world');
     });
   });
 });

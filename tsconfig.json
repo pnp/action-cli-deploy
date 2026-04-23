@@ -1,15 +1,15 @@
 {
   "compilerOptions": {
-    "target": "es2015",
-    "module": "commonjs",
+    "target": "ES2020",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
     "lib": [
-      "ES2015"
+      "ES2020"
     ],
     "types": [
       "node",
       "mocha"
     ],
-    "sourceMap": true,
     "outDir": "./lib",
     "rootDir": "./src",
     "strict": true,

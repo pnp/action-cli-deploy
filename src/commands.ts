@@ -1,4 +1,4 @@
-import { Options, Scope } from './validate';
+import { Options, Scope } from './validate.js';
 
 export function getAddCommand(options: Options): string {
   let command: string;

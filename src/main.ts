@@ -1,10 +1,10 @@
 import * as core from '@actions/core';
-import { getOptions, execCommand } from './utils';
-import { Options, validate } from './validate';
-import { constants } from './constants';
-import { existsSync } from 'fs';
-import { getAddCommand, getDeployCommand } from './commands';
-import { SpoApp } from './models';
+import { getOptions, execCommand } from './utils.js';
+import { Options, validate } from './validate.js';
+import { constants } from './constants.js';
+import { existsSync } from 'node:fs';
+import { getAddCommand, getDeployCommand } from './commands.js';
+import { SpoApp } from './models.js';
 
 async function run(): Promise<void> {
 

@@ -1,5 +1,5 @@
 import * as core from '@actions/core';
-import { Options } from './validate';
+import { Options } from './validate.js';
 import * as exec from '@actions/exec';
 
 export const isNullOrEmpty = (string: string | undefined | null): boolean => {

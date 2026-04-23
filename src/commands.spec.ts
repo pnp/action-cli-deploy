@@ -1,6 +1,6 @@
 import * as assert from 'assert';
-import { getAddCommand, getDeployCommand, } from './commands';
-import { Options, Scope } from './validate';
+import { getAddCommand, getDeployCommand, } from './commands.js';
+import { Options, Scope } from './validate.js';
 
 describe('commands', () => {
 
