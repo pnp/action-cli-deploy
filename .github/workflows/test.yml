@@ -12,7 +12,7 @@ jobs:
     
     steps:
       - name: Log in to tenant
-        uses: pnp/action-cli-login@v3
+        uses: pnp/action-cli-login@v4
         id: login
         with:
           ADMIN_USERNAME: ${{ secrets.ADMIN_USERNAME }}
