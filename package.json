@@ -124,7 +124,7 @@
     "@types/node": "^24.12.2",
     "@types/sinon": "^21.0.1",
     "c8": "^11.0.0",
-    "concurrently": "^9.2.1",
+    "concurrently": "^10.0.3",
     "esbuild": "^0.28.0",
     "eslint": "^10.2.1",
     "esmock": "^2.7.1",
