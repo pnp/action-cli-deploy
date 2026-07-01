@@ -12,14 +12,14 @@ jobs:
     
     steps:
       - name: Log in to tenant
-        uses: pnp/action-cli-login@v3
+        uses: pnp/action-cli-login@v4
         id: login
         with:
           ADMIN_USERNAME: ${{ secrets.ADMIN_USERNAME }}
           ADMIN_PASSWORD: ${{ secrets.ADMIN_PASSWORD }}
       
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         
       - name: CLI for Microsoft 365 Deploy
         uses: ./
